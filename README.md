@@ -7,7 +7,7 @@
 **See what your AI coding agent actually did.** Local audit of Claude Code session transcripts: leaked secrets, risky shell commands, unsafe file edits, hook bypasses — plus per-project / per-model token usage. Runs entirely on your machine, nothing uploaded.
 
 > **Today:** Claude Code only. Cursor and Windsurf session-format adapters are on the roadmap but not yet shipped — see [Roadmap](#roadmap).
-> **Released:** v0.3.0 on npm with signed provenance via OIDC trusted publishing. Verify with `npm audit signatures`.
+> **Released:** v0.3.1 on npm with signed provenance via OIDC trusted publishing. Verify with `npm audit signatures`.
 > **Status:** detection logic and per-project / per-model token reporting are shipped; release pipeline and signed provenance are shipped; a red-team golden set and drift monitoring are still in flight. Full posture in [Governance](#governance).
 
 ## Why
@@ -131,7 +131,7 @@ Where the project is, what's committed to, and what would make us archive it.
 
 | Status | What |
 |---|---|
-| ✅ Shipped | Threat model + scope. Streaming JSONL parser (tolerant of malformed lines, documented in `src/types.ts`). Five rule families: secrets-in-prompt, secrets-in-tool-result, risky-bash, sensitive-path-edit, hook-bypass — 13 bash patterns, 15 sensitive paths, 15 secret patterns. 132 unit tests. Per-project / per-model token usage with CSV export. v0.3.0 published on npm as @sessionguard/cli. CI on every push. |
+| ✅ Shipped | Threat model + scope. Streaming JSONL parser (tolerant of malformed lines, documented in `src/types.ts`). Five rule families: secrets-in-prompt, secrets-in-tool-result, risky-bash, sensitive-path-edit, hook-bypass — 13 bash patterns, 15 sensitive paths, 15 secret patterns. 132 unit tests. Per-project / per-model token usage with CSV export. v0.3.1 published on npm as @sessionguard/cli. CI on every push. |
 | 🟡 In flight | Real-session validation against the developer's own corpus (15 sessions / 6883 events as of 2026-06-29). Golden red-team fixture set (planted-secret + risky-command scenarios with known-true labels). Drift monitoring (rule-coverage / FP-rate / scan-time, scheduled weekly against a frozen corpus). |
 | ⏳ Not started | Cursor and Windsurf session-format adapters. Pricing-file support to convert tokens to dollar estimates. Custom rules via plugin interface. |
 
@@ -159,7 +159,7 @@ Set early, reviewed before each release.
 
 ### Decision log
 
-Material decisions are recorded in this repo's decision log (one paragraph per decision, dated). Change history sits alongside it — current release v0.3.0.
+Material decisions are recorded in this repo's decision log (one paragraph per decision, dated). Change history sits alongside it — current release v0.3.1.
 
 ### Sunset criteria
 

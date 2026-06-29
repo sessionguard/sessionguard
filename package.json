@@ -1,6 +1,6 @@
 {
   "name": "@sessionguard/cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Security audit for local AI coding agent sessions (Claude Code, Cursor, Windsurf). Scans for leaked secrets, risky commands, and unsafe edits — all local, zero upload.",
   "type": "module",
   "repository": {

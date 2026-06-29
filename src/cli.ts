@@ -251,7 +251,7 @@ async function main(): Promise<void> {
   }
   if (args.version) {
     // Kept simple — avoids needing to read package.json at runtime.
-    process.stdout.write("sessionguard 0.3.0\n");
+    process.stdout.write("sessionguard 0.3.1\n");
     process.exit(0);
   }
 

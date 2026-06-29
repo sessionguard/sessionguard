@@ -107,8 +107,9 @@ export const riskyBash: Rule = {
       const cmd = typeof use.input?.command === "string" ? (use.input.command as string) : "";
       if (!cmd) continue;
       if (isInterpreterEval(cmd)) continue;
+      const isLocalCurl = /\b(?:curl|wget)\b[^|\n]*(?:localhost|127\.0\.0\.1|0\.0\.0\.0)/.test(cmd);
       for (const risk of RISKS) {
-        if (risk.pattern.test(cmd)) {
+        if (risk.pattern.test(cmd) && !(risk.id === "curl-pipe-shell" && isLocalCurl)) {
           out.push({
             ruleId: `${this.id}.${risk.id}`,
             severity: risk.severity,
