@@ -1,18 +1,18 @@
 {
-  "name": "@product-nomad/agentaudit",
-  "version": "0.2.5",
+  "name": "@sessionguard/cli",
+  "version": "0.3.0",
   "description": "Security audit for local AI coding agent sessions (Claude Code, Cursor, Windsurf). Scans for leaked secrets, risky commands, and unsafe edits — all local, zero upload.",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Product-nomad/agentaudit.git"
+    "url": "git+https://github.com/sessionguard/sessionguard.git"
   },
-  "homepage": "https://github.com/Product-nomad/agentaudit#readme",
+  "homepage": "https://github.com/sessionguard/sessionguard#readme",
   "bugs": {
-    "url": "https://github.com/Product-nomad/agentaudit/issues"
+    "url": "https://github.com/sessionguard/sessionguard/issues"
   },
   "bin": {
-    "agentaudit": "dist/cli.js"
+    "sessionguard": "dist/cli.js"
   },
   "files": [
     "dist",

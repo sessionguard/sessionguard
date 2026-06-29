@@ -1,71 +1,71 @@
-# agentaudit
+# sessionguard
 
-[![CI](https://github.com/Product-nomad/agentaudit/actions/workflows/ci.yml/badge.svg)](https://github.com/Product-nomad/agentaudit/actions/workflows/ci.yml)
+[![CI](https://github.com/sessionguard/sessionguard/actions/workflows/ci.yml/badge.svg)](https://github.com/sessionguard/sessionguard/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Node: ≥22](https://img.shields.io/badge/node-%E2%89%A522-green.svg)](./package.json)
 
 **See what your AI coding agent actually did.** Local audit of Claude Code session transcripts: leaked secrets, risky shell commands, unsafe file edits, hook bypasses — plus per-project / per-model token usage. Runs entirely on your machine, nothing uploaded.
 
 > **Today:** Claude Code only. Cursor and Windsurf session-format adapters are on the roadmap but not yet shipped — see [Roadmap](#roadmap).
-> **Released:** v0.2.5 on npm with signed provenance via OIDC trusted publishing. Verify with `npm audit signatures`.
+> **Released:** v0.3.0 on npm with signed provenance via OIDC trusted publishing. Verify with `npm audit signatures`.
 > **Status:** detection logic and per-project / per-model token reporting are shipped; release pipeline and signed provenance are shipped; a red-team golden set and drift monitoring are still in flight. Full posture in [Governance](#governance).
 
 ## Why
 
 AI coding agents happily run `curl | sudo bash`, write to `~/.ssh/authorized_keys`, or commit with `--no-verify` when things get in their way. The transcripts that record this live on your disk — and often contain `.env` contents, API keys fed to the model, or tool outputs that captured credentials. Nobody reads them after the fact.
 
-`agentaudit` is a grep with manners for those transcripts. Run it weekly (or in a hook) and get a punch list of things worth a second look.
+`sessionguard` is a grep with manners for those transcripts. Run it weekly (or in a hook) and get a punch list of things worth a second look.
 
 ## Install
 
 ```sh
 # From npm (recommended)
-npm install -g @product-nomad/agentaudit
-agentaudit --version
+npm install -g @sessionguard/cli
+sessionguard --version
 
 # Or from source
-git clone https://github.com/Product-nomad/agentaudit.git
-cd agentaudit
+git clone https://github.com/sessionguard/sessionguard.git
+cd sessionguard
 npm ci && npm run build
-npm link            # puts `agentaudit` on PATH
+npm link            # puts `sessionguard` on PATH
 ```
 
-Requires Node 22+. The package is published scoped as `@product-nomad/agentaudit`; the CLI binary is `agentaudit` either way.
+Requires Node 22+. The package is published scoped as `@sessionguard/cli`; the CLI binary is `sessionguard`.
 
 ### Verifying the release
 
-Every release from v0.2.1 onwards is published from GitHub Actions via npm OIDC trusted publishing, with a signed provenance attestation linking the tarball to a specific commit and workflow run. To verify what you just installed:
+Every release from v0.3.0 onwards is published from GitHub Actions via npm OIDC trusted publishing, with a signed provenance attestation linking the tarball to a specific commit and workflow run. To verify what you just installed:
 
 ```sh
 npm audit signatures
 ```
 
-Provenance records for each version are also visible on <https://www.npmjs.com/package/@product-nomad/agentaudit>.
+Provenance records for each version are also visible on <https://www.npmjs.com/package/@sessionguard/cli>.
 
 ## Usage
 
 ```sh
-agentaudit audit                          # scan ~/.claude/projects/**/*.jsonl
-agentaudit audit path/to/session.jsonl    # scan specific files
-agentaudit audit --min high               # only show high/critical
-agentaudit audit --json                   # machine-readable output
-agentaudit audit --group-by rule          # group by rule instead of session
+sessionguard audit                          # scan ~/.claude/projects/**/*.jsonl
+sessionguard audit path/to/session.jsonl    # scan specific files
+sessionguard audit --min high               # only show high/critical
+sessionguard audit --json                   # machine-readable output
+sessionguard audit --group-by rule          # group by rule instead of session
 
-agentaudit report                         # per-project / per-model token rollup
-agentaudit report --top 5                 # top N sessions by output tokens
-agentaudit report --since 7d              # only sessions active in the last 7 days
-agentaudit report --since 2026-04-01      # or an ISO date
-agentaudit report --tag-config clients.json  # group by client tag (see Billing below)
-agentaudit report --json                  # full UsageReport as JSON
-agentaudit report --csv                   # one row per session × model, invoice-ready
+sessionguard report                         # per-project / per-model token rollup
+sessionguard report --top 5                 # top N sessions by output tokens
+sessionguard report --since 7d              # only sessions active in the last 7 days
+sessionguard report --since 2026-04-01      # or an ISO date
+sessionguard report --tag-config clients.json  # group by client tag (see Billing below)
+sessionguard report --json                  # full UsageReport as JSON
+sessionguard report --csv                   # one row per session × model, invoice-ready
 
-agentaudit rules                          # list all audit checks
+sessionguard rules                          # list all audit checks
 ```
 
 Exit code mirrors the highest severity found: `30` (critical), `20` (high), `10` (medium), `0` otherwise. Useful in a shell hook or cron:
 
 ```sh
-agentaudit audit --min high || notify-send "Claude Code session findings"
+sessionguard audit --min high || notify-send "Claude Code session findings"
 ```
 
 ## What it checks (v0.1)
@@ -82,7 +82,7 @@ Patterns are deliberately conservative. False positives erode trust; a false *ne
 
 ## Privacy
 
-Everything runs locally. `agentaudit` reads files under `~/.claude/projects/`, processes them in memory, and prints to stdout. No network, no telemetry, no config to opt out of.
+Everything runs locally. `sessionguard` reads files under `~/.claude/projects/`, processes them in memory, and prints to stdout. No network, no telemetry, no config to opt out of.
 
 Findings may contain excerpts of prompts or command strings — don't paste `--json` output anywhere public without reviewing it first.
 
@@ -110,10 +110,10 @@ If you're a freelancer or consultant using Claude Code across multiple client pr
 Save as `~/.config/agentaudit/clients.json` (default) or pass `--tag-config path/to/file.json`. Patterns are literal substrings unless wrapped in `/.../` (then parsed as a regex; first match wins).
 
 Then:
-- `agentaudit report --since 2026-04-01` → monthly-close token totals by client.
-- `agentaudit report --csv > april.csv` → one row per session × model, ready for a pivot table.
+- `sessionguard report --since 2026-04-01` → monthly-close token totals by client.
+- `sessionguard report --csv > april.csv` → one row per session × model, ready for a pivot table.
 
-`agentaudit` reports token counts, not dollars. Per-session dollar values need current pricing; see the decision log for the reasoning and the planned pricing-file support.
+`sessionguard` reports token counts, not dollars. Per-session dollar values need current pricing; see the decision log for the reasoning and the planned pricing-file support.
 
 ## Roadmap
 
@@ -131,8 +131,8 @@ Where the project is, what's committed to, and what would make us archive it.
 
 | Status | What |
 |---|---|
-| ✅ Shipped | Threat model + scope. Streaming JSONL parser (tolerant of malformed lines, documented in `src/types.ts`). Five rule families: secrets-in-prompt, secrets-in-tool-result, risky-bash, sensitive-path-edit, hook-bypass — 13 bash patterns, 15 sensitive paths, 15 secret patterns. 91 unit tests. Per-project / per-model token usage with CSV export. v0.2.5 published on npm with OIDC trusted publishing and signed provenance. CI on every push. |
-| 🟡 In flight | Real-session validation against the developer's own corpus (17 sessions / 925 events as of 2026-04-25). Golden red-team fixture set (planted-secret + risky-command scenarios with known-true labels). Drift monitoring (rule-coverage / FP-rate / scan-time, scheduled weekly against a frozen corpus). |
+| ✅ Shipped | Threat model + scope. Streaming JSONL parser (tolerant of malformed lines, documented in `src/types.ts`). Five rule families: secrets-in-prompt, secrets-in-tool-result, risky-bash, sensitive-path-edit, hook-bypass — 13 bash patterns, 15 sensitive paths, 15 secret patterns. 132 unit tests. Per-project / per-model token usage with CSV export. v0.3.0 published on npm as @sessionguard/cli. CI on every push. |
+| 🟡 In flight | Real-session validation against the developer's own corpus (15 sessions / 6883 events as of 2026-06-29). Golden red-team fixture set (planted-secret + risky-command scenarios with known-true labels). Drift monitoring (rule-coverage / FP-rate / scan-time, scheduled weekly against a frozen corpus). |
 | ⏳ Not started | Cursor and Windsurf session-format adapters. Pricing-file support to convert tokens to dollar estimates. Custom rules via plugin interface. |
 
 ### Outcome metrics
@@ -159,7 +159,7 @@ Set early, reviewed before each release.
 
 ### Decision log
 
-Material decisions are recorded in this repo's decision log (one paragraph per decision, dated). Change history sits alongside it — current release v0.2.5.
+Material decisions are recorded in this repo's decision log (one paragraph per decision, dated). Change history sits alongside it — current release v0.3.0.
 
 ### Sunset criteria
 

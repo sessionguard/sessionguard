@@ -40,7 +40,7 @@ export function renderUsageText(report: UsageReport, opts: UsageRenderOptions = 
   const lines: string[] = [];
 
   lines.push(
-    `agentaudit usage report — ${fmtInt(report.sessionsScanned)} session${report.sessionsScanned === 1 ? "" : "s"} / ${fmtInt(report.eventsScanned)} events`,
+    `sessionguard usage report — ${fmtInt(report.sessionsScanned)} session${report.sessionsScanned === 1 ? "" : "s"} / ${fmtInt(report.eventsScanned)} events`,
   );
   lines.push(`total  ${fmtUsage(report.total)}`);
   lines.push("");
