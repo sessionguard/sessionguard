@@ -103,5 +103,5 @@ function validateTagConfig(value: unknown, path: string): TagConfig {
 }
 
 export function defaultTagConfigPath(): string {
-  return join(homedir(), ".config", "agentaudit", "clients.json");
+  return join(homedir(), ".config", "sessionguard", "clients.json");
 }

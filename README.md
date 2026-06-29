@@ -107,7 +107,7 @@ If you're a freelancer or consultant using Claude Code across multiple client pr
 }
 ```
 
-Save as `~/.config/agentaudit/clients.json` (default) or pass `--tag-config path/to/file.json`. Patterns are literal substrings unless wrapped in `/.../` (then parsed as a regex; first match wins).
+Save as `~/.config/sessionguard/clients.json` (default) or pass `--tag-config path/to/file.json`. Patterns are literal substrings unless wrapped in `/.../` (then parsed as a regex; first match wins).
 
 Then:
 - `sessionguard report --since 2026-04-01` → monthly-close token totals by client.
