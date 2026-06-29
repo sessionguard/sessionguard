@@ -27,13 +27,13 @@ interface ParsedArgs {
   version: boolean;
 }
 
-const USAGE = `agentaudit — local governance for AI coding agent sessions
+const USAGE = `sessionguard — local governance for AI coding agent sessions
 
 Usage:
-  agentaudit audit [paths...]   scan session transcripts for security findings
-  agentaudit report [paths...]  token / project / model usage report
-  agentaudit rules              list available audit rules
-  agentaudit --help             show this help
+  sessionguard audit [paths...]   scan session transcripts for security findings
+  sessionguard report [paths...]  token / project / model usage report
+  sessionguard rules              list available audit rules
+  sessionguard --help             show this help
 
 Options:
   --json                        machine-readable JSON (alias for --format json)
@@ -251,7 +251,7 @@ async function main(): Promise<void> {
   }
   if (args.version) {
     // Kept simple — avoids needing to read package.json at runtime.
-    process.stdout.write("agentaudit 0.2.5\n");
+    process.stdout.write("sessionguard 0.3.0\n");
     process.exit(0);
   }
 
@@ -275,7 +275,7 @@ async function main(): Promise<void> {
 
 main().catch((err) => {
   process.stderr.write(
-    `agentaudit: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`,
+    `sessionguard: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`,
   );
   process.exit(1);
 });
